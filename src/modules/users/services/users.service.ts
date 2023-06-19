@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { User } from './types/user.type';
-import { CreateUserDto } from './dto/create-user.dto';
 import { nanoid } from 'nanoid';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { CreateUserDto } from '../dtos/create-user.dto';
+import { User } from '../entities/user.entity';
+import { UpdateUserDto } from '../dtos/update-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -15,7 +15,7 @@ export class UsersService {
     return this.users;
   }
 
-  createUser(dto: CreateUserDto) {
+  createUser(dto: CreateUserDto): User {
     const { name, depart } = dto;
     const id = nanoid(6);
     const newUser = {
@@ -38,7 +38,7 @@ export class UsersService {
   deleteUser(uid: string) {
     const user = this.findUserById(uid);
     this.users = this.users.filter((user) => user.id !== uid);
-    return { ...user, deleted: true };
+    return user;
   }
 
   findUserById(uid: string) {

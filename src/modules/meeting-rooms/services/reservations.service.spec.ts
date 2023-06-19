@@ -2,8 +2,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { ReservationsService } from './reservations.service';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { MeetingRoomsService } from './meeting-rooms.service';
-import { MeetingRoom, MeetingRoomSize } from '../types/meeting-room.type';
-import { UpdateReservationDto } from '../dto/update-reservation.dto';
+import { MeetingRoom, MeetingRoomSize } from '../entities/meeting-room.entity';
+import { UpdateReservationDto } from '../dtos/update-reservation.dto';
 
 describe('ReservationsService', () => {
   let service: ReservationsService;

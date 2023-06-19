@@ -48,7 +48,16 @@ describe('ReservationsController (e2e)', () => {
     return request(app.getHttpServer())
       .get(`/reservations`)
       .expect(200)
-      .expect([response1.body, response2.body]);
+      .expect({
+        code: 200,
+        message: 'Find All Reservations',
+        data: {
+          reservations: [
+            response1.body.data.reservation,
+            response2.body.data.reservation,
+          ],
+        },
+      });
   });
 
   it('/reservations/:id (GET)', async () => {
@@ -60,11 +69,15 @@ describe('ReservationsController (e2e)', () => {
         startTime: 9,
         endTime: 10,
       });
-    const id = response.body.id;
+    const id = response.body.data.reservation.id;
     return request(app.getHttpServer())
       .get(`/reservations/${id}`)
       .expect(200)
-      .expect(response.body);
+      .expect({
+        code: 200,
+        message: 'Find Reservation Success',
+        data: { reservation: response.body.data.reservation },
+      });
   });
 
   it('/reservations/:id (PUT)', async () => {
@@ -76,14 +89,20 @@ describe('ReservationsController (e2e)', () => {
         startTime: 9,
         endTime: 10,
       });
-    const id = response.body.id;
+    const id = response.body.data.reservation.id;
     return request(app.getHttpServer())
       .put(`/reservations/${id}`)
       .send({
         endTime: 11,
       })
       .expect(200)
-      .expect({ ...response.body, endTime: 11 });
+      .expect({
+        code: 200,
+        message: 'Update Reservation Success',
+        data: {
+          reservation: { ...response.body.data.reservation, endTime: 11 },
+        },
+      });
   });
 
   it('/reservations/:id (DELETE)', async () => {
@@ -95,7 +114,7 @@ describe('ReservationsController (e2e)', () => {
         startTime: 9,
         endTime: 10,
       });
-    const id = response.body.id;
+    const id = response.body.data.reservation.id;
     return request(app.getHttpServer())
       .delete(`/reservations/${id}`)
       .expect(200);
@@ -172,7 +191,7 @@ describe('ReservationsController (e2e)', () => {
           startTime: 9,
           endTime: 10,
         });
-      const id = response.body.id;
+      const id = response.body.data.reservation.id;
       return await request(app.getHttpServer())
         .put(`/reservations/${id}`)
         .send({
@@ -196,7 +215,7 @@ describe('ReservationsController (e2e)', () => {
           startTime: 9,
           endTime: 10,
         });
-      const id = response.body.id;
+      const id = response.body.data.reservation.id;
       return await request(app.getHttpServer())
         .put(`/reservations/${id}`)
         .send({
@@ -216,7 +235,7 @@ describe('ReservationsController (e2e)', () => {
           startTime: 9,
           endTime: 10,
         });
-      const id = response.body.id;
+      const id = response.body.data.reservation.id;
       return await request(app.getHttpServer())
         .put(`/reservations/${id}`)
         .send({

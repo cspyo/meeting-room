@@ -26,10 +26,15 @@ describe('MeetingRoomsController (e2e)', () => {
       floor: 1,
       size: 'small',
     };
+    const response = {
+      code: 200,
+      message: 'Find Meeting Room Success',
+      data: { meetingRoom: meetingRoom101 },
+    };
     return request(app.getHttpServer())
       .get(`/meeting-rooms/101`)
       .expect(200)
-      .expect(meetingRoom101);
+      .expect(response);
   });
 
   describe('Error Handling', () => {

@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { MeetingRoomsService } from './meeting-rooms.service';
-import { MeetingRoomSize } from '../types/meeting-room.type';
+import { MeetingRoomSize } from '../entities/meeting-room.entity';
 import { NotFoundException } from '@nestjs/common';
 
 describe('MeetingRoomsService', () => {

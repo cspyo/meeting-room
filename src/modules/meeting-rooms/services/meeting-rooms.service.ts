@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { MeetingRoom, MeetingRoomSize } from '../types/meeting-room.type';
+import { MeetingRoom, MeetingRoomSize } from '../entities/meeting-room.entity';
 
 @Injectable()
 export class MeetingRoomsService {

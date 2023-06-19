@@ -31,11 +31,12 @@ describe('UserController (e2e)', () => {
       name: 'testName',
       depart: 'testDepart',
     });
-    const id = response.body.id;
-    return request(app.getHttpServer())
-      .get(`/users/${id}`)
-      .expect(200)
-      .expect(response.body);
+    const id = response.body.data.user.id;
+    return request(app.getHttpServer()).get(`/users/${id}`).expect(200).expect({
+      code: 200,
+      message: 'Find user Success',
+      data: response.body.data,
+    });
   });
 
   it('/users (PUT)', async () => {
@@ -43,14 +44,18 @@ describe('UserController (e2e)', () => {
       name: 'testName',
       depart: 'testDepart',
     });
-    const id = response.body.id;
+    const id = response.body.data.user.id;
     return request(app.getHttpServer())
       .put(`/users/${id}`)
       .send({
         depart: 'testDepart2',
       })
       .expect(200)
-      .expect({ ...response.body, depart: 'testDepart2' });
+      .expect({
+        code: 200,
+        message: 'Update user Success',
+        data: { user: { ...response.body.data.user, depart: 'testDepart2' } },
+      });
   });
 
   it('/users (DELETE)', async () => {
@@ -58,11 +63,15 @@ describe('UserController (e2e)', () => {
       name: 'testName',
       depart: 'testDepart',
     });
-    const id = response.body.id;
+    const id = response.body.data.user.id;
     return request(app.getHttpServer())
       .delete(`/users/${id}`)
       .expect(200)
-      .expect({ ...response.body, deleted: true });
+      .expect({
+        code: 200,
+        message: 'Delete user Success',
+        data: { user: response.body.data.user },
+      });
   });
 
   describe('Error Handling', () => {

@@ -6,11 +6,11 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { MeetingRoomsService } from './meeting-rooms.service';
-import { Reservation } from '../types/reservation.type';
+import { Reservation } from '../entities/reservation.entity';
 import { nanoid } from 'nanoid';
-import { CreateReservationDto } from '../dto/create-reservation.dto';
-import { MeetingRoom } from '../types/meeting-room.type';
-import { UpdateReservationDto } from '../dto/update-reservation.dto';
+import { CreateReservationDto } from '../dtos/create-reservation.dto';
+import { MeetingRoom } from '../entities/meeting-room.entity';
+import { UpdateReservationDto } from '../dtos/update-reservation.dto';
 
 @Injectable()
 export class ReservationsService {
