@@ -14,6 +14,7 @@ import { ReservationsService } from './services/reservations.service';
 export class MeetingRoomsModule {
   constructor(private readonly reservationsService: ReservationsService) {}
 
+  // Cron Job 을 이용해 매일 자정에 예약 초기화
   @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
   handleResetReservations() {
     this.reservationsService.resetReservations();

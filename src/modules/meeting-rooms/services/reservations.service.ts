@@ -39,16 +39,19 @@ export class ReservationsService {
     const { userId, meetingRoomLocation, startTime, endTime } =
       createReservationDto;
 
+    // 예약 시간이 9~18시 사이인지 확인
     if (this.isOutOfReservationTimeRange(startTime, endTime)) {
       throw new BadRequestException(`The reservation time is out of range`);
     }
 
+    // 한 명당 하루 예약 제한 시간 6시간을 넘겼는지 확인
     if (this.hasExceededTotalReservationTime(userId, startTime, endTime)) {
       throw new BadRequestException(
         `The user has exceeded the maximum reservation hours per day`,
       );
     }
 
+    // 요청한 예약에 겹치는 기존 예약이 있는지 확인
     if (
       this.isReservationTimeConflict(meetingRoomLocation, startTime, endTime)
     ) {
@@ -57,6 +60,8 @@ export class ReservationsService {
       );
     }
 
+    // 회의실이 존재하는지 확인, 없으면 404 Not Found
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const meetingRoom: MeetingRoom =
       this.meetingRoomsService.findMeetingRoomByLocation(meetingRoomLocation);
 
@@ -90,10 +95,12 @@ export class ReservationsService {
     const updateStartTime = startTime ?? reservation.startTime;
     const updateEndTime = endTime ?? reservation.endTime;
 
+    // 예약 시간이 9~18시 사이인지 확인
     if (this.isOutOfReservationTimeRange(updateStartTime, updateEndTime)) {
       throw new BadRequestException(`The reservation time is out of range`);
     }
 
+    // 한 명당 하루 예약 제한 시간 6시간을 넘겼는지 확인
     if (
       this.hasExceededTotalReservationTime(
         updateUserId,
@@ -106,6 +113,8 @@ export class ReservationsService {
       );
     }
 
+    // 요청한 예약에 겹치는 기존 예약이 있는지 확인
+    // 기존 회의실에서 시간만 바꾸는 경우면 확인할 필요 없다
     if (updateMeetingRoomLocation != reservation.meetingRoomLocation) {
       if (
         this.isReservationTimeConflict(
@@ -133,6 +142,8 @@ export class ReservationsService {
   }
 
   deleteReservation(id: string) {
+    // 존재하는지 확인. 없으면 404 Not Found
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const reservation = this.findReservationById(id);
     try {
       this.reservations.delete(id);
@@ -161,9 +172,12 @@ export class ReservationsService {
     startTime: number,
     endTime: number,
   ): boolean {
+    // 요청한 사용자의 기존 예약을 모두 가져온다
     const existingReservations = Array.from(this.reservations.values()).filter(
       (reservation) => reservation.userId === userId,
     );
+
+    // 기존 예약 시간을 모두 합쳐서 반환한다.
     const totalReservedHours = existingReservations.reduce(
       (total, reservation) => {
         return (
@@ -175,6 +189,7 @@ export class ReservationsService {
     );
     const requestedHours = this.getHoursDifference(startTime, endTime);
 
+    // 요청한 예약 시간과 기존 예약 시간이 6시간을 넘으면 true
     return totalReservedHours + requestedHours > 6;
   }
 
@@ -183,12 +198,16 @@ export class ReservationsService {
     startTime: number,
     endTime: number,
   ) {
+    // 요청한 회의실의 모든 예약을 찾는다
     const sameLocationReservations = Array.from(
       this.reservations.values(),
     ).filter(
       (reservation) => reservation.meetingRoomLocation === meetingRoomLocation,
     );
+
+    // 그 중 하나라도
     for (const reservation of sameLocationReservations) {
+      // 요청한 시간대와 겹치는 것이 있으면 true
       if (
         (startTime >= reservation.startTime &&
           startTime < reservation.endTime) ||

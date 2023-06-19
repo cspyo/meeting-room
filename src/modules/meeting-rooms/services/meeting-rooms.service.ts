@@ -31,6 +31,7 @@ export class MeetingRoomsService {
     this.meetingRooms.clear();
   }
 
+  // 초기 회의실 데이터 입력
   makeMeetingRoomsData() {
     let meetingRoom: MeetingRoom = {
       location: '101',
