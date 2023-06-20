@@ -1,7 +1,3 @@
-# Hopae Assignment
-
-Check Our Issue Page for more information about the assignment.
-
 ## Installation
 
 ```bash
@@ -33,3 +29,7 @@ $ yarn run test:e2e
 # test coverage
 $ yarn run test:cov
 ```
+
+## Docs
+Swagger API Docs
+${baseUrl}/api/v0/docs
